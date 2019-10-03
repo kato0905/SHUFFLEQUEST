@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/shop_view"
+    tools:context=".Shop">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+
+    <!-- 背景 -->
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_shop" />
+
+    <ImageView
+        android:id="@+id/tencho"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/tencho"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.071"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.039" />
+
+    <!-- アナウンス -->
+    <TextView
+        android:id="@+id/announce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/announcebox"
+        android:padding="3dp"
+        android:text="アイテムはセットしないと使えないから注意しろ"
+        android:textColor="#FFF"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.372" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_town"
+        android:text="戻る"
+        android:textColor="#FFF"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.946" />
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#000"
+        android:padding="10dp"
+        android:text="▶︎"
+        android:textColor="#FFF"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.91"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
+
+    <Button
+        android:id="@+id/before_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#000"
+        android:padding="10dp"
+        android:text="◀︎"
+        android:textColor="#FFF"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.68"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
+
+
+    <TableLayout
+        android:id="@+id/money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/statusbox"
+        android:orientation="horizontal"
+        android:padding="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.81"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.48000002">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="所持金:"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/player_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="player_money"
+                android:textSize="20dp" />
+        </TableRow>
+
+    </TableLayout>
+
+    <!-- アイテム販売page1 -->
+    <TableLayout
+        android:id="@+id/page1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/statusbox"
+        android:orientation="horizontal"
+        android:padding="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.81"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="名前"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="価格"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="効果"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="説明"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:textColor="#364dfa"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_1_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cost"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_1_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="power"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_1_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="item_explain"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:textColor="#364dfa"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_2_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cost"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_2_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="power"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_2_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="item_explain"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_3_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#364dfa"
+                android:text="name"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_3_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cost"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_3_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="power"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_3_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="item_explain"
+                android:textSize="20dp" />
+        </TableRow>
+
+    </TableLayout>
+
+    <!-- アイテム販売page2 -->
+    <TableLayout
+        android:id="@+id/page2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/statusbox"
+        android:orientation="horizontal"
+        android:padding="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.81"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="名前"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="価格"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="効果"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="説明"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_4_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#364dfa"
+                android:text="name"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_4_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cost"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_4_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="power"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_4_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="item_explain"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_5_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#364dfa"
+                android:text="name"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_5_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cost"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_5_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="power"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_5_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="item_explain"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_6_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#364dfa"
+                android:text="name"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_6_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cost"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_6_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="power"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_6_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="item_explain"
+                android:textSize="20dp" />
+        </TableRow>
+
+    </TableLayout>
+
+    <!-- アイテム販売page3 -->
+    <TableLayout
+        android:id="@+id/page3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/statusbox"
+        android:orientation="horizontal"
+        android:padding="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.81"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="名前"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="価格"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="効果"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="説明"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_7_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:textColor="#364dfa"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_7_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cost"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_7_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="power"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_7_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="item_explain"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_8_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:textColor="#364dfa"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_8_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cost"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_8_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="power"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_8_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="item_explain"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_9_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:textColor="#364dfa"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_9_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cost"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_9_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="power"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/item_9_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="item_explain"
+                android:textSize="20dp" />
+        </TableRow>
+
+    </TableLayout>
+
+</android.support.constraint.ConstraintLayout>

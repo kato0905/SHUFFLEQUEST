@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kato0905.shufflequest">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Light.NoTitleBar">
+        <activity android:name=".Title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Battle" />
+        <activity android:name=".Field_Forest" />
+        <activity android:name=".Map_castle" />
+        <activity android:name=".Intro" />
+        <activity android:name=".Map_town" />
+        <activity android:name=".Game_clear" />
+        <activity android:name=".Status" />
+        <activity android:name=".Shop" />
+        <activity android:name=".Shuffle"></activity>
+    </application>
+
+</manifest>

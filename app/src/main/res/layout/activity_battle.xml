@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Battle">
+
+    <!-- android:background="@drawable/background_dangeon" -->
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_dangeon" />
+
+    <!-- アナウンス -->
+    <TextView
+        android:id="@+id/announce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:textSize="20dp"
+        android:textColor="#FFF"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/announcebox"
+        android:text="Announce"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.481" />
+
+    <!-- プレイヤー情報 -->
+    <TableLayout
+        android:id="@+id/player_status"
+        android:padding="7dp"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/statusbox"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/player_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="player" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HP" />
+
+            <TextView
+                android:id="@+id/player_current_hp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/player_maxhp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MP" />
+
+            <TextView
+                android:id="@+id/player_current_mp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/player_maxmp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="攻撃力:" />
+
+            <TextView
+                android:id="@+id/player_attack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="魔法防御:" />
+
+            <TextView
+                android:id="@+id/player_mdef"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="防御力:" />
+
+            <TextView
+                android:id="@+id/player_defense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="素早さ:" />
+
+            <TextView
+                android:id="@+id/player_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="器用:" />
+
+            <TextView
+                android:id="@+id/player_dex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/magic_info"
+                android:textColor="#364dfa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[魔法情報表示] " />
+
+            <TextView
+                android:id="@+id/item_info"
+                android:textColor="#364dfa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" [アイテム情報表示]" />
+
+        </TableRow>
+
+    </TableLayout>
+
+
+    <!-- コマンド情報 -->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="500dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp">
+
+            <Button
+                android:id="@+id/attack_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:textColor="#FFF"
+                android:textSize="20dp"
+                android:layout_margin="3dp"
+                android:text="攻撃" />
+
+            <Button
+                android:id="@+id/magic_button1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:textColor="#FFF"
+                android:textSize="20dp"
+                android:layout_margin="3dp"
+                android:text="魔法1" />
+
+            <Button
+                android:id="@+id/magic_button2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:textColor="#FFF"
+                android:textSize="20dp"
+                android:layout_margin="3dp"
+                android:text="魔法2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/magic_button3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:textColor="#FFF"
+                android:textSize="20dp"
+                android:layout_margin="3dp"
+                android:text="魔法3" />
+
+            <Button
+                android:id="@+id/item_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:textColor="#FFF"
+                android:textSize="20dp"
+                android:layout_margin="3dp"
+                android:text="持ち物" />
+
+            <Button
+                android:id="@+id/escape_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:textColor="#FFF"
+                android:textSize="20dp"
+                android:layout_margin="3dp"
+                android:text="逃げる" />
+        </TableRow>
+    </TableLayout>
+
+    <!-- モンスター情報 -->
+    <TableLayout
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="230dp"
+        android:background="@drawable/statusboxmonster"
+        android:orientation="horizontal"
+        android:padding="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.32"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.06999999">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/monster_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HP:" />
+
+            <TextView
+                android:id="@+id/monster_current_hp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MP:" />
+
+            <TextView
+                android:id="@+id/monster_current_mp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="攻撃力:" />
+
+            <TextView
+                android:id="@+id/monster_attack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="防御力:" />
+
+            <TextView
+                android:id="@+id/monster_defense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="素早さ:" />
+
+            <TextView
+                android:id="@+id/monster_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="器用:" />
+
+            <TextView
+                android:id="@+id/monster_dex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:background="@android:color/darker_gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物理耐性:" />
+
+            <TextView
+                android:id="@+id/monster_resist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="炎耐性:" />
+
+            <TextView
+                android:id="@+id/monster_fire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="雷耐性:" />
+
+            <TextView
+                android:id="@+id/monster_thunder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="氷耐性:" />
+
+            <TextView
+                android:id="@+id/monster_ice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="異常耐性:" />
+
+            <TextView
+                android:id="@+id/monster_poison"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12345" />
+        </TableRow>
+    </TableLayout>
+
+    <!-- モンスター画像 -->
+    <ImageView
+        android:id="@+id/monster_view"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/slime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.114" />
+
+    <!-- ダメージエフェクト -->
+    <ImageView
+        android:id="@+id/damageeffect1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/damageeffect"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.37"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.69" />
+
+    <ImageView
+        android:id="@+id/damageeffect2"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/damageeffect2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.33"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
+
+
+
+</android.support.constraint.ConstraintLayout>
