@@ -1,6 +1,8 @@
 package com.kato0905.shufflequest
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -35,9 +37,9 @@ class Shop : Activity() {
         realm.beginTransaction()
 
         //下のページを透明に
-        findViewById<TableLayout>(R.id.page1).alpha = 1.toFloat()
-        findViewById<TableLayout>(R.id.page2).alpha = 0.toFloat()
-        findViewById<TableLayout>(R.id.page3).alpha = 0.toFloat()
+        findViewById<TableLayout>(R.id.page1).setVisibility(View.VISIBLE)
+        findViewById<TableLayout>(R.id.page2).setVisibility(View.GONE)
+        findViewById<TableLayout>(R.id.page3).setVisibility(View.GONE)
 
         val player = realm.where(PlayerModel::class.java).findFirst()
         val item = realm.where(ItemModel::class.java).findAll()
@@ -52,24 +54,61 @@ class Shop : Activity() {
         page_move()
 
 
-        var i=1
-        var st=""
+        var i = 1
+        var item_name = ""
 
         item.forEach(){
-            var resID = getResources().getIdentifier("item_"+ i + "_name", "id", "com.kato0905.shufflequest")
-            findViewById<TextView>(resID).setText(""+it.name)
-            if(i<3) {
-                st = it.name
+            var ItemID = getResources().getIdentifier("item_"+ i + "_name", "id", "com.kato0905.shufflequest")
+            findViewById<TextView>(ItemID).setText(""+it.name)
 
-                //購入処理
-                findViewById<TextView>(resID).setOnClickListener {
-                    Toast.makeText(applicationContext, "トースト" + st + "メッセージ", Toast.LENGTH_LONG).show()
+            //購入処理
+            findViewById<TextView>(ItemID).setOnClickListener {
+                item_name = findViewById<TextView>(ItemID).text.toString()
+
+                val buy_item = realm.where(ItemModel::class.java).equalTo("name", item_name).findFirst()
+
+                if(buy_item!!.cost <= player.money && buy_item.current < buy_item.max){
+                    //購入可能
+                    AlertDialog.Builder(this)
+                            .setMessage("購入しますか？(現在の所持数:"+buy_item.current+")")
+                            .setPositiveButton("YES", { dialog, which ->
+                                player.money -= buy_item.cost
+                                buy_item.current++
+                                findViewById<TextView>(R.id.player_money).setText(""+player!!.money)
+                                realm.commitTransaction()
+                                realm.beginTransaction()
+                            })
+                            .setNegativeButton("NO",{dialog, which ->
+
+                            })
+                            .show()
+                }else if(buy_item.cost > player.money){
+                    // 購入不可能(お金が足りない)
+                    AlertDialog.Builder(this)
+                            .setMessage("お金が足りない")
+                            .setPositiveButton("BACK", { dialog, which ->
+
+                            })
+                            .show()
+                }else if(buy_item.current >= buy_item.max){
+                    // 購入不可能(最大数所持している)
+                    AlertDialog.Builder(this)
+                            .setMessage("最大数所持している")
+                            .setPositiveButton("BACK", { dialog, which ->
+
+                            })
+                            .show()
+                }else{
+                    Log.d("system_output", "Error in buy item")
                 }
             }
-            resID = getResources().getIdentifier("item_"+ i + "_cost", "id", "com.kato0905.shufflequest")
+
+            var resID = getResources().getIdentifier("item_"+ i + "_cost", "id", "com.kato0905.shufflequest")
             findViewById<TextView>(resID).setText(" "+it.cost)
+
             resID = getResources().getIdentifier("item_"+ i + "_power", "id", "com.kato0905.shufflequest")
             findViewById<TextView>(resID).setText(" "+it.power)
+
             resID = getResources().getIdentifier("item_"+ i + "_explain", "id", "com.kato0905.shufflequest")
             findViewById<TextView>(resID).setText(" "+it.explain)
             i++
@@ -79,48 +118,48 @@ class Shop : Activity() {
 
     fun page_move(){
 
-
         findViewById<TextView>(R.id.next_button).setOnClickListener {
-            if(findViewById<TableLayout>(R.id.page1).alpha == 1.toFloat()){
+            if(findViewById<TableLayout>(R.id.page1).visibility == View.VISIBLE){
 
-                findViewById<TableLayout>(R.id.page1).alpha = 0.toFloat()
-                findViewById<TableLayout>(R.id.page2).alpha = 1.toFloat()
-                findViewById<TableLayout>(R.id.page3).alpha = 0.toFloat()
+                findViewById<TableLayout>(R.id.page1).setVisibility(View.GONE)
+                findViewById<TableLayout>(R.id.page2).setVisibility(View.VISIBLE)
+                findViewById<TableLayout>(R.id.page3).setVisibility(View.GONE)
 
-            }else if(findViewById<TableLayout>(R.id.page2).alpha == 1.toFloat()){
+            }else if(findViewById<TableLayout>(R.id.page2).visibility == View.VISIBLE){
 
-                findViewById<TableLayout>(R.id.page1).alpha = 0.toFloat()
-                findViewById<TableLayout>(R.id.page2).alpha = 0.toFloat()
-                findViewById<TableLayout>(R.id.page3).alpha = 1.toFloat()
+                findViewById<TableLayout>(R.id.page1).setVisibility(View.GONE)
+                findViewById<TableLayout>(R.id.page2).setVisibility(View.GONE)
+                findViewById<TableLayout>(R.id.page3).setVisibility(View.VISIBLE)
 
-            }else if(findViewById<TableLayout>(R.id.page3).alpha == 1.toFloat()){
+            }else if(findViewById<TableLayout>(R.id.page3).visibility == View.VISIBLE){
 
-                findViewById<TableLayout>(R.id.page1).alpha = 1.toFloat()
-                findViewById<TableLayout>(R.id.page2).alpha = 0.toFloat()
-                findViewById<TableLayout>(R.id.page3).alpha = 0.toFloat()
+                findViewById<TableLayout>(R.id.page1).setVisibility(View.VISIBLE)
+                findViewById<TableLayout>(R.id.page2).setVisibility(View.GONE)
+                findViewById<TableLayout>(R.id.page3).setVisibility(View.GONE)
 
             }else{
                 Log.d("system_output","Error in page_move next")
             }
         }
+
         findViewById<TextView>(R.id.before_button).setOnClickListener {
-            if(findViewById<TableLayout>(R.id.page1).alpha == 1.toFloat()){
+            if(findViewById<TableLayout>(R.id.page1).visibility == View.VISIBLE){
 
-                findViewById<TableLayout>(R.id.page1).alpha = 0.toFloat()
-                findViewById<TableLayout>(R.id.page2).alpha = 0.toFloat()
-                findViewById<TableLayout>(R.id.page3).alpha = 1.toFloat()
+                findViewById<TableLayout>(R.id.page1).setVisibility(View.GONE)
+                findViewById<TableLayout>(R.id.page2).setVisibility(View.GONE)
+                findViewById<TableLayout>(R.id.page3).setVisibility(View.VISIBLE)
 
-            }else if(findViewById<TableLayout>(R.id.page2).alpha == 1.toFloat()){
+            }else if(findViewById<TableLayout>(R.id.page2).visibility == View.VISIBLE){
 
-                findViewById<TableLayout>(R.id.page1).alpha = 1.toFloat()
-                findViewById<TableLayout>(R.id.page2).alpha = 0.toFloat()
-                findViewById<TableLayout>(R.id.page3).alpha = 0.toFloat()
+                findViewById<TableLayout>(R.id.page1).setVisibility(View.VISIBLE)
+                findViewById<TableLayout>(R.id.page2).setVisibility(View.GONE)
+                findViewById<TableLayout>(R.id.page3).setVisibility(View.GONE)
 
-            }else if(findViewById<TableLayout>(R.id.page3).alpha == 1.toFloat()){
+            }else if(findViewById<TableLayout>(R.id.page3).visibility == View.VISIBLE){
 
-                findViewById<TableLayout>(R.id.page1).alpha = 0.toFloat()
-                findViewById<TableLayout>(R.id.page2).alpha = 1.toFloat()
-                findViewById<TableLayout>(R.id.page3).alpha = 0.toFloat()
+                findViewById<TableLayout>(R.id.page1).setVisibility(View.GONE)
+                findViewById<TableLayout>(R.id.page2).setVisibility(View.VISIBLE)
+                findViewById<TableLayout>(R.id.page3).setVisibility(View.GONE)
 
             }else{
                 Log.d("system_output","Error in page_move before")

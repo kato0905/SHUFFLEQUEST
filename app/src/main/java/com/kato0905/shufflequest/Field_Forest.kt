@@ -16,7 +16,6 @@ import kotlin.math.max
 class Field_Forest : Activity() {
 
     var current_progress = 1
-    var field_id = 1
     lateinit var realm: Realm
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +28,7 @@ class Field_Forest : Activity() {
                 .build()
         realm = Realm.getInstance(realmConfig)
 
-
+        findViewById<TextView>(R.id.back_button).setText("街へ")
         findViewById<TextView>(R.id.step).setText(current_progress.toString())
 
 
@@ -66,11 +65,12 @@ class Field_Forest : Activity() {
 
         //戻るボタン
         findViewById<Button>(R.id.back_button).setOnClickListener{
-            findViewById<Button>(R.id.back_button).alpha = 0.6.toFloat()   //ボタンを透明に
+            findViewById<Button>(R.id.back_button).alpha = 0.6.toFloat()
             Handler().postDelayed(Runnable {
-                findViewById<Button>(R.id.back_button).alpha = 1.toFloat()   //ボタンを非透明に
+                findViewById<Button>(R.id.back_button).alpha = 1.toFloat()
             }, (100.toLong()))
             current_progress--
+
             if(current_progress == 1){
                 findViewById<TextView>(R.id.back_button).setText("街へ")
             }else if(current_progress == 2){
@@ -80,7 +80,9 @@ class Field_Forest : Activity() {
                 val intent = Intent(this, Map_town::class.java)
                 startActivity(intent)
             }
+
             findViewById<TextView>(R.id.step).setText(current_progress.toString())
+
             when(current_progress) {
                 in 0..15 -> findViewById<ImageView>(R.id.background).setImageResource(R.drawable.background_grass)
                 in 16..30 -> findViewById<ImageView>(R.id.background).setImageResource(R.drawable.background_forest)
@@ -91,8 +93,7 @@ class Field_Forest : Activity() {
                 else -> Log.d("system_output", "Error in back_button")
             }
 
-            var random = (0..100).random()
-            if(random <= 30 || current_progress == 100){
+            if((0..100).random() <= 30 || current_progress == 100){
                 //敵が出てくる
                 val intent = Intent(this, Battle::class.java)
                 intent.putExtra("current_progress",current_progress.toString())
@@ -102,9 +103,9 @@ class Field_Forest : Activity() {
 
         //ステータスボタン
         findViewById<Button>(R.id.status_button).setOnClickListener {
-            findViewById<Button>(R.id.status_button).alpha = 0.6.toFloat()   //ボタンを透明に
+            findViewById<Button>(R.id.status_button).alpha = 0.6.toFloat()
             Handler().postDelayed(Runnable {
-                findViewById<Button>(R.id.status_button).alpha = 1.toFloat()   //ボタンを非透明に
+                findViewById<Button>(R.id.status_button).alpha = 1.toFloat()
             }, (100.toLong()))
 
             val intent = Intent(this, Status::class.java)

@@ -4,6 +4,7 @@ package com.kato0905.shufflequest
 import android.os.Bundle
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -36,6 +37,7 @@ class Title : Activity() {
             insertEnemy()
             insertPlayer()
             insertItem()
+            insertOrigin()
             mRealm.close()
 
             val intent = Intent(this, Intro::class.java)
@@ -63,19 +65,20 @@ class Title : Activity() {
             //1 -> 使えるがセットされていない
             //2 -> セットされていつでも使用できる
             //常に2が3個になるようにする
-            mRealm.insert(MagicModel(1,"ファイヤ", 30, 40, 2))
-            mRealm.insert(MagicModel(2,"サンダー", 30, 40, 2))
-            mRealm.insert(MagicModel(3,"アイス", 30, 40, 2))
-            mRealm.insert(MagicModel(4,"スリープ", 20, 20, 0))
-            mRealm.insert(MagicModel(5,"ワープ", 10, 0, 0))
-            mRealm.insert(MagicModel(6,"レイズ", 20, 30, 0))
-            mRealm.insert(MagicModel(7,"ハード", 20, 30, 0))
-            mRealm.insert(MagicModel(8,"ラピッド", 20, 30, 0))
-            mRealm.insert(MagicModel(9,"ポイズン", 30, 10, 0))
-            mRealm.insert(MagicModel(10,"ヒール", 40, 30, 1))
-            mRealm.insert(MagicModel(11,"ブレード", 40, 200, 0))
-            mRealm.insert(MagicModel(12,"ライトニング", 40, 150, 0))
-            mRealm.insert(MagicModel(13,"バッシュ", 40, 150, 0))
+            mRealm.insert(MagicModel(1,"ファイヤ", 30, 40, 2, "炎属性の攻撃"))
+            mRealm.insert(MagicModel(2,"サンダー", 30, 40, 2, "雷属性の攻撃"))
+            mRealm.insert(MagicModel(3,"アイス", 30, 40, 2, "氷属性の攻撃"))
+            mRealm.insert(MagicModel(4,"スリープ", 20, 20, 0, "確率で敵を眠らせる"))
+            mRealm.insert(MagicModel(5,"ワープ", 10, 0, 0, "街までワープ"))
+            mRealm.insert(MagicModel(6,"レイズ", 20, 30, 0, "攻撃力上昇"))
+            mRealm.insert(MagicModel(7,"ハード", 20, 30, 0, "防御力上昇"))
+            mRealm.insert(MagicModel(8,"ラピッド", 20, 30, 0, "素早さ上昇"))
+            mRealm.insert(MagicModel(9,"ポイズン", 30, 10, 0, "確率で敵を毒状態にする"))
+            mRealm.insert(MagicModel(10,"ヒール", 40, 30, 1, "HPを固定値回復する"))
+            mRealm.insert(MagicModel(11,"ブレード", 40, 200, 0, "攻撃力に応じた攻撃"))
+            mRealm.insert(MagicModel(12,"ライトニング", 40, 150, 0, "素早さに応じた攻撃"))
+            mRealm.insert(MagicModel(13,"バッシュ", 40, 150, 0, "防御力に応じた攻撃"))
+            mRealm.insert(MagicModel(14,"エクスヒール", 50, 30, 0, "HPを割合で回復する"))
         }
     }
 
@@ -126,7 +129,7 @@ class Title : Activity() {
             //中身をリセット
             mRealm.where(PlayerModel::class.java).findAll().deleteAllFromRealm()
 
-            mRealm.insert(PlayerModel(1, "勇者", 150, 100, 60, 40, 50, 40, 40, 0, 0, 0, 150, 100))
+            mRealm.insert(PlayerModel(1, "勇者", 150, 100, 60, 40, 50, 40, 40, 0, 0, 500, 150, 100))
         }
     }
 
@@ -143,7 +146,35 @@ class Title : Activity() {
             mRealm.insert(ItemModel(6, "力の指輪", 1800, 30, "攻撃力を固定値増加", 0,1,0))
             mRealm.insert(ItemModel(7, "防の指輪", 1800, 30, "防御力を固定値増加", 0,1,0))
             mRealm.insert(ItemModel(8, "速の指輪", 1800, 30, "素早さを固定値増加", 0,1,0))
-            mRealm.insert(ItemModel(9, "魔耐の指輪", 1800, 30, "魔耐を固定値増加", 0,1,0))
+            mRealm.insert(ItemModel(9, "魔耐の指輪", 1800, 30, "魔防御を固定値増加", 0,1,0))
+        }
+    }
+
+    fun insertOrigin(){
+        mRealm.executeTransaction{
+            //中身をリセット
+            mRealm.where(OriginPlayerModel::class.java).findAll().deleteAllFromRealm()
+            mRealm.where(OriginItemModel::class.java).findAll().deleteAllFromRealm()
+            mRealm.where(OriginMagicModel::class.java).findAll().deleteAllFromRealm()
+            mRealm.where(OriginMonsterModel::class.java).findAll().deleteAllFromRealm()
+
+            var load_item = mRealm.where(ItemModel::class.java).findAll()
+            load_item.forEach(){
+                mRealm.insert(OriginItemModel(it.id, it.name, it.cost, it.power, it.explain, it.current,it.max,it.set))
+            }
+            var load_monster = mRealm.where(EnemyModel::class.java).findAll()
+            load_monster.forEach(){
+                mRealm.insert(OriginMonsterModel(it.id, it.name, it.hp, it.mp, it.attack, it.defense, it.speed, it.dex, it.resist, it.fire, it.thunder, it.ice, it.poison, it.chara, it.drop, it.imagename))
+            }
+            var load_player = mRealm.where(PlayerModel::class.java).findAll()
+            load_player.forEach(){
+                mRealm.insert(OriginPlayerModel(it.id, it.name, it.hp, it.mp, it.attack, it.defense, it.speed, it.dex, it.mdef, it.weapon, it.armor, it.money, it.current_hp, it.current_mp))
+            }
+            var load_magic = mRealm.where(MagicModel::class.java).findAll()
+            load_magic.forEach(){
+                mRealm.insert(OriginMagicModel(it.id,it.name, it.mp, it.power, it.canuse, it.explain))
+            }
+
         }
     }
 

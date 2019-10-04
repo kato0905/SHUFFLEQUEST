@@ -31,15 +31,15 @@ class Status : Activity() {
         var item_element = 0
 
         //所持している魔法
-        val load_magic_1 = realm.where(MagicModel::class.java).equalTo("canuse", 1.toInt()).findAll()
+        var load_notset_magic = realm.where(MagicModel::class.java).equalTo("canuse", 1.toInt()).findAll()
         //セットしている魔法（３つ）
-        val load_magic_2 = realm.where(MagicModel::class.java).equalTo("canuse", 2.toInt()).findAll()
+        val load_set_magic= realm.where(MagicModel::class.java).equalTo("canuse", 2.toInt()).findAll()
         //所持しているアイテム
-        val load_item = realm.where(ItemModel::class.java).greaterThan("current",0).notEqualTo("set", 1.toInt()).findAll()
+        var load_item = realm.where(ItemModel::class.java).greaterThan("current",0).notEqualTo("set", 1.toInt()).findAll()
         //現在セットしているアイテム
         val current_item = realm.where(ItemModel::class.java).equalTo("set", 1.toInt()).findFirst()
 
-        load_magic_1.forEach(){
+        load_notset_magic.forEach(){
             magic_element++
         }
 
@@ -47,27 +47,27 @@ class Status : Activity() {
             item_element++
         }
 
-        var magic_1: Array<String?> = arrayOfNulls(magic_element)
-        var magic_2_id: Array<Int> = arrayOf(1,2,3)
-        var magic_2_name: Array<String> = arrayOf("1","2","3")
+        var notset_magic_name: Array<String?> = arrayOfNulls(magic_element)
+        var set_magic_id: Array<Int> = arrayOf(1,2,3)
+        var set_magic_name: Array<String> = arrayOf("1","2","3")
         var item_1: Array<String?> = arrayOfNulls(item_element)
         var item_text: Array<String?> = arrayOfNulls(item_element)
-        var magic_text: Array<String?> = arrayOfNulls(magic_element)
-        var magic2_text: Array<String?> = arrayOfNulls(3)
+        var notset_magic_text: Array<String?> = arrayOfNulls(magic_element)
+        var set_magic_text: Array<String?> = arrayOfNulls(3)
 
 
-        load_magic_1.forEach(){
-            magic_1[i] = it.name
-            magic_text[i] = it.name+" 消費MP"+it.mp+" 効果"+it.power
+        load_notset_magic.forEach(){
+            notset_magic_name[i] = it.name
+            notset_magic_text[i] = it.name+" 消費MP"+it.mp+" 効果"+it.power
             i++
         }
 
         i = 0
 
-        load_magic_2.forEach(){
-            magic_2_id[i] = it.id
-            magic_2_name[i] = it.name
-            magic2_text[i] = it.name+"MP"+it.mp+"効果"+it.power
+        load_set_magic.forEach(){
+            set_magic_id[i] = it.id
+            set_magic_name[i] = it.name
+            set_magic_text[i] = it.name+"MP"+it.mp+"効果"+it.power
             i++
     }
 
@@ -78,7 +78,6 @@ class Status : Activity() {
             item_text[i] = it.name+" ("+it.current+"個)"
             i++
         }
-
 
         //アイテムセット
         findViewById<Button>(R.id.item_button).setOnClickListener {
@@ -102,9 +101,9 @@ class Status : Activity() {
         //魔法セット
         findViewById<Button>(R.id.magic_button1).setOnClickListener {
             AlertDialog.Builder(this)
-                    .setItems(magic_text, { dialog, which ->
-                        val select_magic = realm.where(MagicModel::class.java).equalTo("name", magic_1[which]).findFirst()
-                        val before_magic = realm.where(MagicModel::class.java).equalTo("id", magic_2_id[0]).findFirst()
+                    .setItems(notset_magic_text, { dialog, which ->
+                        val select_magic = realm.where(MagicModel::class.java).equalTo("name", notset_magic_name[which]).findFirst()
+                        val before_magic = realm.where(MagicModel::class.java).equalTo("id", set_magic_id[0]).findFirst()
                         select_magic!!.canuse = 2
                         before_magic!!.canuse = 1
                         realm.commitTransaction()
@@ -119,9 +118,9 @@ class Status : Activity() {
         }
         findViewById<Button>(R.id.magic_button2).setOnClickListener {
             AlertDialog.Builder(this)
-                    .setItems(magic_text, { dialog, which ->
-                        val select_magic = realm.where(MagicModel::class.java).equalTo("name", magic_1[which]).findFirst()
-                        val before_magic = realm.where(MagicModel::class.java).equalTo("id", magic_2_id[1]).findFirst()
+                    .setItems(notset_magic_text, { dialog, which ->
+                        val select_magic = realm.where(MagicModel::class.java).equalTo("name", notset_magic_name[which]).findFirst()
+                        val before_magic = realm.where(MagicModel::class.java).equalTo("id", set_magic_id[1]).findFirst()
                         select_magic!!.canuse = 2
                         before_magic!!.canuse = 1
                         realm.commitTransaction()
@@ -136,9 +135,9 @@ class Status : Activity() {
         }
         findViewById<Button>(R.id.magic_button3).setOnClickListener {
             AlertDialog.Builder(this)
-                    .setItems(magic_text, { dialog, which ->
-                        val select_magic = realm.where(MagicModel::class.java).equalTo("name", magic_1[which]).findFirst()
-                        val before_magic = realm.where(MagicModel::class.java).equalTo("id", magic_2_id[2]).findFirst()
+                    .setItems(notset_magic_text, { dialog, which ->
+                        val select_magic = realm.where(MagicModel::class.java).equalTo("name", notset_magic_name[which]).findFirst()
+                        val before_magic = realm.where(MagicModel::class.java).equalTo("id", set_magic_id[2]).findFirst()
                         select_magic!!.canuse = 2
                         before_magic!!.canuse = 1
                         realm.commitTransaction()
@@ -169,7 +168,7 @@ class Status : Activity() {
         }
 
         //プレイヤーステータス表示
-        findViewById<TextView>(R.id.player_name).setText(player!!.name)
+        findViewById<TextView>(R.id.player_name).setText(player!!.name.toString())
         findViewById<TextView>(R.id.player_current_hp).setText(player.current_hp.toString())
         findViewById<TextView>(R.id.player_current_mp).setText(player.current_mp.toString())
         findViewById<TextView>(R.id.player_maxhp).setText(" / "+player.hp.toString())
@@ -182,9 +181,9 @@ class Status : Activity() {
         findViewById<TextView>(R.id.player_money).setText(player.money.toString())
 
         //魔法名前表示
-        findViewById<Button>(R.id.magic_button1).setText(magic2_text[0])
-        findViewById<Button>(R.id.magic_button2).setText(magic2_text[1])
-        findViewById<Button>(R.id.magic_button3).setText(magic2_text[2])
+        findViewById<Button>(R.id.magic_button1).setText(set_magic_text[0])
+        findViewById<Button>(R.id.magic_button2).setText(set_magic_text[1])
+        findViewById<Button>(R.id.magic_button3).setText(set_magic_text[2])
 
         //アイテム名表示
         findViewById<Button>(R.id.item_button).setText(current_item!!.name+"("+current_item.current+"個)")

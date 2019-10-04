@@ -218,44 +218,49 @@ class Battle : Activity() {
             when (item!!.id) {
                 //1 薬草
                 1 -> {
-                    player_current_hp = max(player_current_hp + item.power, player!!.hp)
+                    player_current_hp = min(player_current_hp + item.power, player!!.hp)
                     latency = latency + 1000
                     Handler().postDelayed(Runnable {
-                        findViewById<TextView>(R.id.player_current_hp).setText(player_current_hp.toString())
+                        findViewById<TextView>(R.id.player_current_hp).setText(min(player_current_hp + item.power, player!!.hp).toString())
                         findViewById<TextView>(R.id.announce).setText(player.name + "のHPが" + item.power + "回復した")
                     }, latency.toLong())
                     item.current--
                     realm.commitTransaction()
+                    realm.beginTransaction()
                 }
                 //2 聖水
                 2 -> {
-                    player_current_mp = max(player_current_mp + item.power, player!!.mp)
+                    player_current_mp = min(player_current_mp + item.power, player!!.mp)
                     latency = latency + 1000
                     Handler().postDelayed(Runnable {
-                        findViewById<TextView>(R.id.player_current_mp).setText(player_current_mp.toString())
+                        findViewById<TextView>(R.id.player_current_mp).setText(min(player_current_mp + item.power, player!!.mp).toString())
                         findViewById<TextView>(R.id.announce).setText(player.name + "のMPが" + item.power + "回復した")
                     }, latency.toLong())
                     item.current--
                     realm.commitTransaction()
+                    realm.beginTransaction()
                 }
                 //3 上薬草
                 3 -> {
-                    player_current_hp = max(player_current_hp + player_current_hp * item.power, player!!.hp)
+                    var recovery_amount = player!!.hp * item.power / 100
+                    player_current_hp = min(player_current_hp + recovery_amount, player!!.hp)
                     latency = latency + 1000
                     Handler().postDelayed(Runnable {
-                        findViewById<TextView>(R.id.player_current_hp).setText(player_current_hp.toString())
-                        findViewById<TextView>(R.id.announce).setText(player.name + "のHPが" + player_current_hp * item.power + "回復した")
+                        findViewById<TextView>(R.id.player_current_hp).setText(min(player_current_hp + recovery_amount, player!!.hp).toString())
+                        findViewById<TextView>(R.id.announce).setText(player.name + "のHPが" + recovery_amount + "回復した")
                     }, latency.toLong())
                     item.current--
                     realm.commitTransaction()
+                    realm.beginTransaction()
                 }
                 //4 上聖水
                 4 -> {
-                    player_current_mp = max(player_current_mp + player_current_mp * item.power, player!!.mp)
+                    var recovery_amount = player!!.mp * item.power / 100
+                    player_current_mp = min(player_current_mp + recovery_amount, player!!.mp)
                     latency = latency + 1000
                     Handler().postDelayed(Runnable {
-                        findViewById<TextView>(R.id.player_current_mp).setText(player_current_mp.toString())
-                        findViewById<TextView>(R.id.announce).setText(player.name + "のMPが" + player_current_mp * item.power + "回復した")
+                        findViewById<TextView>(R.id.player_current_mp).setText(min(player_current_mp + recovery_amount, player!!.mp).toString())
+                        findViewById<TextView>(R.id.announce).setText(player.name + "のMPが" + recovery_amount + "回復した")
                     }, latency.toLong())
                     item.current--
                     realm.commitTransaction()
@@ -342,7 +347,6 @@ class Battle : Activity() {
         }else{
             announce(1000,"しかしMPが足りない")
         }
-
     }
 
     fun player_attack(monster : EnemyModel?, player : PlayerModel?, item : ItemModel?, time : Int){

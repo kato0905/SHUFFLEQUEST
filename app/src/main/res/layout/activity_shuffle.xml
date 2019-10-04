@@ -14,6 +14,390 @@
         android:scaleType="centerCrop"
         android:src="@drawable/background_status" />
 
+    <!-- プレイヤー情報 -->
+    <TableLayout
+        android:id="@+id/player_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/statusbox"
+        android:orientation="horizontal"
+        android:padding="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.120000005">
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/player_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HP" />
+
+            <TextView
+                android:id="@+id/player_current_hp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/player_maxhp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MP" />
+
+            <TextView
+                android:id="@+id/player_current_mp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/player_maxmp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="攻撃力 : " />
+
+            <TextView
+                android:id="@+id/player_attack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 魔法防御 : " />
+
+            <TextView
+                android:id="@+id/player_mdef"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="防御力 : " />
+
+            <TextView
+                android:id="@+id/player_defense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 素早さ : " />
+
+            <TextView
+                android:id="@+id/player_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="器用 : " />
+
+            <TextView
+                android:id="@+id/player_dex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" お金 : " />
+
+            <TextView
+                android:id="@+id/player_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <!-- 魔法情報 -->
+    <TableLayout
+        android:id="@+id/magic_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/statusbox"
+        android:orientation="horizontal"
+        android:padding="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.51">
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="名前" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="消費MP" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 効果" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 説明" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/magic1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ファイヤ" />
+
+            <TextView
+                android:id="@+id/magic1_mp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/magic1_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/magic1_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/magic2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ファイヤ" />
+
+            <TextView
+                android:id="@+id/magic2_mp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/magic2_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/magic2_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/magic3_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ファイヤ" />
+
+            <TextView
+                android:id="@+id/magic3_mp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/magic3_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/magic3_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <!-- アイテム情報 -->
+    <TableLayout
+        android:id="@+id/item_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/statusbox"
+        android:orientation="horizontal"
+        android:padding="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.72">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="名前" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="効果" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 個数" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 説明" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="薬草" />
+
+            <TextView
+                android:id="@+id/item_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+            <TextView
+                android:id="@+id/item_current"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="99" />
+
+            <TextView
+                android:id="@+id/item_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9999" />
+
+        </TableRow>
+
+    </TableLayout>
+
     <Button
         android:id="@+id/back_button"
         android:layout_width="100dp"

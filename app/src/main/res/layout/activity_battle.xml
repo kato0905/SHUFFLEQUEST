@@ -117,7 +117,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="攻撃力:" />
+                android:text="攻撃力 : " />
 
             <TextView
                 android:id="@+id/player_attack"
@@ -128,7 +128,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="魔法防御:" />
+                android:text=" 魔法防御 : " />
 
             <TextView
                 android:id="@+id/player_mdef"
@@ -146,7 +146,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="防御力:" />
+                android:text="防御力 : " />
 
             <TextView
                 android:id="@+id/player_defense"
@@ -157,7 +157,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="素早さ:" />
+                android:text=" 素早さ : " />
 
             <TextView
                 android:id="@+id/player_speed"
@@ -175,7 +175,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="器用:" />
+                android:text="器用 : " />
 
             <TextView
                 android:id="@+id/player_dex"
@@ -188,7 +188,7 @@
                 android:textColor="#364dfa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="[魔法情報表示] " />
+                android:text=" [魔法情報表示] " />
 
             <TextView
                 android:id="@+id/item_info"
