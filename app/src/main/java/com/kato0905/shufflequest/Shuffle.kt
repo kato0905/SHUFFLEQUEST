@@ -41,14 +41,15 @@ class Shuffle : Activity() {
         val magic = arrayOf(Magic(), Magic(), Magic())
         val myApp = this.application as MyApp
 
+        val shuffle_num =myApp.monster_num*6 + myApp.player_num*7 + myApp.magic_num*2 + myApp.item_num*1
 
         val origin_player = realm.where(OriginPlayerModel::class.java).findFirst()
-        val origin_monster = realm.where(OriginMonsterModel::class.java).findAll()
         val origin_magic = realm.where(OriginMagicModel::class.java).findAll()
         val origin_item = realm.where(OriginItemModel::class.java).findAll()
         val player = realm.where(PlayerModel::class.java).findFirst()
         val item = realm.where(ItemModel::class.java).equalTo("set",1.toInt()).findFirst()
         val load_magic = realm.where(MagicModel::class.java).equalTo("canuse", 2.toInt()).findAll()
+
 
         var i = 0
         load_magic.forEach(){
@@ -60,16 +61,124 @@ class Shuffle : Activity() {
             i++
         }
 
-        /*
+        val list = ArrayList<Int>()
+
+        for (i in 1..shuffle_num) {
+            list.add(i)
+        }
+
+        Collections.shuffle(list)
+
+
+        findViewById<Button>(R.id.shuffle_button).setOnClickListener{
+
+            /*
+
         シャッフル処理
         モンスター6種(HP, MP, ATTACK, DEFENSE, SPEED, DEX)
         プレイヤー7種(HP, MP, ATTACK, DEFENSE, SPEED, DEX, MDEF)
         魔法2種(MP, POWER)
         アイテム1種(POWER)
+
          */
 
-        do_shuffle(3)
 
+            for (num in 1..shuffle_num) {
+
+                if (num in 1..myApp.monster_num * 6) {
+
+                    //モンスター
+                    val id = num / 6 + 1
+                    val tem_monster = realm.where(EnemyModel::class.java).equalTo("id", id).findFirst()
+                    val tem_push_monster = realm.where(PushMonsterModel::class.java).equalTo("id", id).findFirst()
+                    when (num % 6) {
+                        1 -> {
+                            tem_monster!!.hp = do_shuffle(list[num]).first
+                            tem_push_monster!!.hp = do_shuffle(list[num]).second
+                        }
+                        2 -> {
+                            tem_monster!!.mp = do_shuffle(list[num]).first
+                            tem_push_monster!!.mp = do_shuffle(list[num]).second
+                        }
+                        3 -> {
+                            tem_monster!!.attack = do_shuffle(list[num]).first
+                            tem_push_monster!!.attack = do_shuffle(list[num]).second
+                        }
+                        4 -> {
+                            tem_monster!!.defense = do_shuffle(list[num]).first
+                            tem_push_monster!!.defense = do_shuffle(list[num]).second
+                        }
+                        5 -> {
+                            tem_monster!!.speed = do_shuffle(list[num]).first
+                            tem_push_monster!!.speed = do_shuffle(list[num]).second
+                        }
+                        0 -> {
+                            tem_monster!!.dex = do_shuffle(list[num]).first
+                            tem_push_monster!!.dex = do_shuffle(list[num]).second
+                        }
+                    }
+
+                } else if (num in myApp.monster_num * 6 + 1..myApp.monster_num * 6 + myApp.player_num * 7) {
+
+                    //プレイヤー
+                    val tem_push_player = realm.where(PushPlayerModel::class.java).findFirst()
+                    when ((num - myApp.monster_num * 6) % 7) {
+                        1 -> {
+                            player!!.hp = do_shuffle(list[num]).first
+                            tem_push_player!!.hp = do_shuffle(list[num]).second
+                        }
+                        2 -> {
+                            player!!.mp = do_shuffle(list[num]).first
+                            tem_push_player!!.mp = do_shuffle(list[num]).second
+                        }
+                        3 -> {
+                            player!!.attack = do_shuffle(list[num]).first
+                            tem_push_player!!.attack = do_shuffle(list[num]).second
+                        }
+                        4 -> {
+                            player!!.defense = do_shuffle(list[num]).first
+                            tem_push_player!!.defense = do_shuffle(list[num]).second
+                        }
+                        5 -> {
+                            player!!.speed = do_shuffle(list[num]).first
+                            tem_push_player!!.speed = do_shuffle(list[num]).second
+                        }
+                        6 -> {
+                            player!!.dex = do_shuffle(list[num]).first
+                            tem_push_player!!.dex = do_shuffle(list[num]).second
+                        }
+                        0 -> {
+                            player!!.mdef = do_shuffle(list[num]).first
+                            tem_push_player!!.mdef = do_shuffle(list[num]).second
+                        }
+                    }
+
+                } else if (num in myApp.monster_num * 6 + myApp.player_num * 7 + 1..myApp.monster_num * 6 + myApp.player_num * 7 + myApp.magic_num * 2) {
+
+                    //マジック
+                    val id = (num - myApp.monster_num * 6 + myApp.player_num * 7) / myApp.magic_num
+                    i = 0
+                    load_magic.forEach() {
+                        if (id == i) {
+                            when ((num - myApp.monster_num * 6 + myApp.player_num * 7) % 2) {
+                                1 -> it.mp = do_shuffle(list[num]).first
+                                0 -> it.power = do_shuffle(list[num]).first
+                            }
+                        }
+                        i++
+                    }
+                } else if (num in myApp.monster_num * 6 + myApp.player_num * 7 + myApp.magic_num * 2 + 1..myApp.monster_num * 6 + myApp.player_num * 7 + myApp.magic_num * 2 + myApp.item_num * 1) {
+
+                    //アイテム
+                    item!!.power = do_shuffle(list[num]).first
+                }
+            }
+            realm.commitTransaction()
+            realm.close()
+            val intent = Intent(this, Shuffle::class.java)
+            finish()
+            startActivity(intent)
+        }
 
 
         // 戻るボタン
@@ -117,7 +226,14 @@ class Shuffle : Activity() {
 
 
 
-    fun do_shuffle(num: Int):Int{
+    /*
+
+    受け取った数値がOriginalなデータベースにおいて、どのモデルのどの項目に当てはまるか、
+    その項目の値(Int)とそれの解説(string)を返す
+
+     */
+
+    fun do_shuffle(num: Int):Pair<Int,String>{
         val myApp = this.application as MyApp
 
         val origin_player = realm.where(OriginPlayerModel::class.java).findFirst()
@@ -130,6 +246,7 @@ class Shuffle : Activity() {
 
         load_magic.forEach(){
             val tem_magic = realm.where(OriginMagicModel::class.java).equalTo("id", it.id).findFirst()
+            origin_magic[i].name = tem_magic!!.name
             origin_magic[i].mp = tem_magic!!.mp
             origin_magic[i].power = tem_magic.power
             i++
@@ -142,25 +259,25 @@ class Shuffle : Activity() {
             val id = num/6 + 1
             val tem_monster = realm.where(OriginMonsterModel::class.java).equalTo("id",id).findFirst()
             when(num%6){
-                1 -> return tem_monster!!.hp
-                2 -> return tem_monster!!.mp
-                3 -> return tem_monster!!.attack
-                4 -> return tem_monster!!.defense
-                5 -> return tem_monster!!.speed
-                0 -> return tem_monster!!.dex
+                1 -> return tem_monster!!.hp to tem_monster.name+"のHP"
+                2 -> return tem_monster!!.mp to tem_monster.name+"のMP"
+                3 -> return tem_monster!!.attack to tem_monster.name+"の攻撃力"
+                4 -> return tem_monster!!.defense to tem_monster.name+"の防御力"
+                5 -> return tem_monster!!.speed to tem_monster.name+"の素早さ"
+                0 -> return tem_monster!!.dex to tem_monster.name+"の器用さ"
             }
 
         }else if(num in myApp.monster_num*6+1..myApp.monster_num*6+myApp.player_num*7){
 
             //プレイヤー
             when((num - myApp.monster_num*6)%7){
-                1 -> return origin_player!!.hp
-                2 -> return origin_player!!.mp
-                3 -> return origin_player!!.attack
-                4 -> return origin_player!!.defense
-                5 -> return origin_player!!.speed
-                6 -> return origin_player!!.dex
-                0 -> return origin_player!!.mdef
+                1 -> return origin_player!!.hp to origin_player.name+"のHP"
+                2 -> return origin_player!!.mp to origin_player.name+"のMP"
+                3 -> return origin_player!!.attack to origin_player.name+"の攻撃力"
+                4 -> return origin_player!!.defense to origin_player.name+"の防御力"
+                5 -> return origin_player!!.speed to origin_player.name+"の素早さ"
+                6 -> return origin_player!!.dex to origin_player.name+"の器用さ"
+                0 -> return origin_player!!.mdef to origin_player.name+"の魔法防御"
             }
 
         }else if(num in myApp.monster_num*6+myApp.player_num*7+1..myApp.monster_num*6+myApp.player_num*7+myApp.magic_num*2){
@@ -168,17 +285,17 @@ class Shuffle : Activity() {
             //マジック
             val id = (num - myApp.monster_num*6+myApp.player_num*7)/myApp.magic_num
             when((num - myApp.monster_num*6+myApp.player_num*7)%2){
-                1 -> return origin_magic[id-1].mp
-                0 -> return origin_magic[id-1].power
+                1 -> return origin_magic[id].mp to origin_magic[id].name+"のMP"
+                0 -> return origin_magic[id].power to origin_magic[id].name+"の効果"
             }
 
         }else if(num in myApp.monster_num*6+myApp.player_num*7+myApp.magic_num*2+1..myApp.monster_num*6+myApp.player_num*7+myApp.magic_num*2+myApp.item_num*1){
 
             //アイテム
-            return origin_item!!.power
+            return origin_item!!.power to origin_item.name+"の効果"
         }
 
-        return -1
+        return -1 to "Error"
 
     }
 }

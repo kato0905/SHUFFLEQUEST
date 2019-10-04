@@ -9,6 +9,7 @@ class MyApp : Application() {
     var item_num = 1
     var player_num = 1
 
+
     override fun onCreate() {
         super.onCreate()
     }

@@ -165,10 +165,12 @@ class Title : Activity() {
             var load_monster = mRealm.where(EnemyModel::class.java).findAll()
             load_monster.forEach(){
                 mRealm.insert(OriginMonsterModel(it.id, it.name, it.hp, it.mp, it.attack, it.defense, it.speed, it.dex, it.resist, it.fire, it.thunder, it.ice, it.poison, it.chara, it.drop, it.imagename))
+                mRealm.insert(PushMonsterModel(it.id,it.name+"のHP",it.name+"のMP",it.name+"の攻撃力",it.name+"の防御力",it.name+"の素早さ",it.name+"の器用さ"))
             }
             var load_player = mRealm.where(PlayerModel::class.java).findAll()
             load_player.forEach(){
                 mRealm.insert(OriginPlayerModel(it.id, it.name, it.hp, it.mp, it.attack, it.defense, it.speed, it.dex, it.mdef, it.weapon, it.armor, it.money, it.current_hp, it.current_mp))
+                mRealm.insert(PushPlayerModel(it.id,it.name+"のHP",it.name+"のMP",it.name+"の攻撃力",it.name+"の防御力",it.name+"の素早さ",it.name+"の器用さ", it.name+"の魔法防御"))
             }
             var load_magic = mRealm.where(MagicModel::class.java).findAll()
             load_magic.forEach(){
