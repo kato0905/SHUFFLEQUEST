@@ -3,7 +3,9 @@ package com.kato0905.shufflequest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.media.SoundPool
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,6 +17,8 @@ import kotlinx.android.synthetic.main.activity_shop.*
 class Shop : Activity() {
 
     lateinit var realm: Realm
+    private lateinit var soundPool: SoundPool
+    private lateinit var shop_bgm: MediaPlayer
 
     class Item{
         var id: Int = 0
@@ -25,9 +29,47 @@ class Shop : Activity() {
         var explain: String = ""
     }
 
+    override fun onResume(){
+        super.onResume()
+
+        val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
+        soundPool = SoundPool.Builder()
+                .setMaxStreams(2)
+                .setAudioAttributes(audioAttributes)
+                .build()
+
+        shop_bgm = MediaPlayer.create(this, R.raw.shop_bgm)
+        shop_bgm.setVolume(0.5f, 0.5f)
+        shop_bgm.setLooping(true)
+        shop_bgm.start()
+
+    }
+
+    override fun onStop(){
+        super.onStop()
+        soundPool?.release()
+        shop_bgm.release()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop)
+
+        val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
+        soundPool = SoundPool.Builder()
+                .setMaxStreams(2)
+                .setAudioAttributes(audioAttributes)
+                .build()
+
+        var se_buy = soundPool.load(this, R.raw.buy, 1)
 
         // Realmのセットアップ
         val realmConfig = RealmConfiguration.Builder()
@@ -48,14 +90,16 @@ class Shop : Activity() {
         findViewById<Button>(R.id.back_button).setOnClickListener{
             realm.commitTransaction()
             realm.close()
+            soundPool?.release()
+            shop_bgm.release()
             finish()
         }
 
         page_move()
 
-
         var i = 1
         var item_name = ""
+
 
         item.forEach(){
             var ItemID = getResources().getIdentifier("item_"+ i + "_name", "id", "com.kato0905.shufflequest")
@@ -75,6 +119,7 @@ class Shop : Activity() {
                                 player.money -= buy_item.cost
                                 buy_item.current++
                                 findViewById<TextView>(R.id.player_money).setText(""+player!!.money)
+                                soundPool.play(se_buy, 1.0f, 1.0f, 1, 0, 1.0f)
                                 realm.commitTransaction()
                                 realm.beginTransaction()
                             })
@@ -93,7 +138,7 @@ class Shop : Activity() {
                 }else if(buy_item.current >= buy_item.max){
                     // 購入不可能(最大数所持している)
                     AlertDialog.Builder(this)
-                            .setMessage("最大数所持している")
+                            .setMessage("最大数所持している("+buy_item.current+")個")
                             .setPositiveButton("BACK", { dialog, which ->
 
                             })

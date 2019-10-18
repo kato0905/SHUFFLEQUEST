@@ -19,32 +19,32 @@
         android:layout_width="100dp"
         android:layout_height="80dp"
         android:layout_weight="1"
-        android:textColor="#FFF"
-        android:textSize="25dp"
         android:background="@drawable/button_field"
         android:text="進む"
+        android:textColor="#FFF"
+        android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.785"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.798" />
+        app:layout_constraintVertical_bias="0.75" />
 
     <Button
         android:id="@+id/back_button"
         android:layout_width="100dp"
         android:layout_height="80dp"
         android:layout_weight="1"
-        android:textColor="#FFF"
-        android:textSize="25dp"
         android:background="@drawable/button_field"
         android:text="戻る"
+        android:textColor="#FFF"
+        android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.176"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.798" />
+        app:layout_constraintVertical_bias="0.75" />
 
     <Button
         android:id="@+id/status_button"
@@ -52,14 +52,14 @@
         android:layout_height="50dp"
         android:layout_weight="1"
         android:background="@drawable/button_field"
+        android:text="ステータス"
         android:textColor="#FFF"
         android:textSize="15dp"
-        android:text="ステータス"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.969" />
+        app:layout_constraintVertical_bias="0.89" />
 
 
     <TableLayout
@@ -95,6 +95,21 @@
     </TableLayout>
 
 
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-4993083375135587/7458036048"
+        ads:layout_constraintVertical_bias="1.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </com.google.android.gms.ads.AdView>
 
+    <!-- テスト用のid: ca-app-pub-3940256099942544/6300978111   -->
 
 </android.support.constraint.ConstraintLayout>

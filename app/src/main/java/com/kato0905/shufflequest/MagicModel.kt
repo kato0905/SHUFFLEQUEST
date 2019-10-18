@@ -8,5 +8,6 @@ open class MagicModel(
         open var mp : Int = 0,
         open var power : Int = 0,
         open var canuse : Int = 0,
-        open var explain : String = ""
+        open var explain : String = "",
+        open var cost : Int = 0
 ) : RealmObject() {}

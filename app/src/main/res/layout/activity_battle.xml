@@ -322,6 +322,14 @@
                 android:layout_height="wrap_content"
                 android:text="12345" />
 
+            <TextView
+                android:id="@+id/monster_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#0084ff"
+                android:textSize="15dp"
+                android:text="眠り" />
+
         </TableRow>
 
         <TableRow

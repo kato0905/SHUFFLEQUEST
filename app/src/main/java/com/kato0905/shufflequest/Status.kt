@@ -3,7 +3,10 @@ package com.kato0905.shufflequest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.media.SoundPool
+//import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -13,10 +16,47 @@ import io.realm.RealmConfiguration
 
 class Status : Activity() {
     lateinit var realm: Realm
+    private lateinit var soundPool: SoundPool
+    private lateinit var status_bgm: MediaPlayer
+
+    override fun onResume(){
+        super.onResume()
+
+        val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
+        soundPool = SoundPool.Builder()
+                .setMaxStreams(2)
+                .setAudioAttributes(audioAttributes)
+                .build()
+
+        status_bgm = MediaPlayer.create(this, R.raw.status_bgm)
+        status_bgm.setVolume(0.5f, 0.5f)
+        status_bgm.setLooping(true)
+        status_bgm.start()
+    }
+
+    override fun onStop(){
+        super.onStop()
+        soundPool?.release()
+        status_bgm.release()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_status)
+
+        val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
+        soundPool = SoundPool.Builder()
+                .setMaxStreams(2)
+                .setAudioAttributes(audioAttributes)
+                .build()
 
         // Realmのセットアップ
         val realmConfig = RealmConfiguration.Builder()
@@ -90,6 +130,8 @@ class Status : Activity() {
                         realm.commitTransaction()
                         realm.close()
                         val intent = Intent(this, Status::class.java)
+                        soundPool?.release()
+                        status_bgm.release()
                         finish()
                         startActivity(intent)
                     }).setPositiveButton("BACK", { dialog, which ->
@@ -109,6 +151,8 @@ class Status : Activity() {
                         realm.commitTransaction()
                         realm.close()
                         val intent = Intent(this, Status::class.java)
+                        soundPool?.release()
+                        status_bgm.release()
                         finish()
                         startActivity(intent)
                     }).setPositiveButton("BACK", { dialog, which ->
@@ -126,6 +170,8 @@ class Status : Activity() {
                         realm.commitTransaction()
                         realm.close()
                         val intent = Intent(this, Status::class.java)
+                        soundPool?.release()
+                        status_bgm.release()
                         finish()
                         startActivity(intent)
                     }).setPositiveButton("BACK", { dialog, which ->
@@ -143,6 +189,8 @@ class Status : Activity() {
                         realm.commitTransaction()
                         realm.close()
                         val intent = Intent(this, Status::class.java)
+                        soundPool?.release()
+                        status_bgm.release()
                         finish()
                         startActivity(intent)
                     }).setPositiveButton("BACK", { dialog, which ->
@@ -156,6 +204,8 @@ class Status : Activity() {
             realm.commitTransaction()
             realm.close()
             val intent = Intent(this, Shuffle::class.java)
+            soundPool?.release()
+            status_bgm.release()
             finish()
             startActivity(intent)
         }
@@ -164,6 +214,8 @@ class Status : Activity() {
         findViewById<Button>(R.id.back_button).setOnClickListener{
             realm.commitTransaction()
             realm.close()
+            soundPool?.release()
+            status_bgm.release()
             finish()
         }
 
@@ -186,6 +238,6 @@ class Status : Activity() {
         findViewById<Button>(R.id.magic_button3).setText(set_magic_text[2])
 
         //アイテム名表示
-        findViewById<Button>(R.id.item_button).setText(current_item!!.name+"("+current_item.current+"個)")
+        findViewById<Button>(R.id.item_button).setText(current_item!!.name+"("+current_item.current+"個) 効果"+current_item.power)
     }
 }

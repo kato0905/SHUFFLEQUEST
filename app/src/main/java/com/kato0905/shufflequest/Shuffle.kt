@@ -2,11 +2,15 @@ package com.kato0905.shufflequest
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.media.SoundPool
+//import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import org.w3c.dom.Text
@@ -15,6 +19,8 @@ import java.util.*
 class Shuffle : Activity() {
 
     lateinit var realm: Realm
+    private lateinit var soundPool: SoundPool
+    private lateinit var shuffle_bgm: MediaPlayer
 
     class Magic{
         var id: Int = 0
@@ -26,9 +32,49 @@ class Shuffle : Activity() {
 
     var return_num = -1
 
+    override fun onResume(){
+        super.onResume()
+
+        val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
+        soundPool = SoundPool.Builder()
+                .setMaxStreams(2)
+                .setAudioAttributes(audioAttributes)
+                .build()
+
+        var se_shuffle = soundPool.load(this, R.raw.shuffle, 1)
+
+        shuffle_bgm = MediaPlayer.create(this, R.raw.status_bgm)
+        shuffle_bgm.setVolume(0.5f, 0.5f)
+        shuffle_bgm.setLooping(true)
+        shuffle_bgm.start()
+
+    }
+
+    override fun onStop(){
+        super.onStop()
+        soundPool?.release()
+        shuffle_bgm.release()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shuffle)
+
+        val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
+        soundPool = SoundPool.Builder()
+                .setMaxStreams(2)
+                .setAudioAttributes(audioAttributes)
+                .build()
+
+        var se_shuffle = soundPool.load(this, R.raw.shuffle, 1)
 
         // Realmのセットアップ
         val realmConfig = RealmConfiguration.Builder()
@@ -43,9 +89,6 @@ class Shuffle : Activity() {
 
         val shuffle_num =myApp.monster_num*6 + myApp.player_num*7 + myApp.magic_num*2 + myApp.item_num*1
 
-        val origin_player = realm.where(OriginPlayerModel::class.java).findFirst()
-        val origin_magic = realm.where(OriginMagicModel::class.java).findAll()
-        val origin_item = realm.where(OriginItemModel::class.java).findAll()
         val player = realm.where(PlayerModel::class.java).findFirst()
         val item = realm.where(ItemModel::class.java).equalTo("set",1.toInt()).findFirst()
         val load_magic = realm.where(MagicModel::class.java).equalTo("canuse", 2.toInt()).findAll()
@@ -69,9 +112,9 @@ class Shuffle : Activity() {
 
         Collections.shuffle(list)
 
-
+        //シャッフルボタン
         findViewById<Button>(R.id.shuffle_button).setOnClickListener{
-
+            soundPool.play(se_shuffle, 1.0f, 1.0f, 1, 0, 1.0f)
             /*
 
         シャッフル処理
@@ -88,7 +131,7 @@ class Shuffle : Activity() {
                 if (num in 1..myApp.monster_num * 6) {
 
                     //モンスター
-                    val id = num / 6 + 1
+                    val id = (num-1) / 6 + 1
                     val tem_monster = realm.where(EnemyModel::class.java).equalTo("id", id).findFirst()
                     val tem_push_monster = realm.where(PushMonsterModel::class.java).equalTo("id", id).findFirst()
                     when (num % 6) {
@@ -124,11 +167,15 @@ class Shuffle : Activity() {
                     val tem_push_player = realm.where(PushPlayerModel::class.java).findFirst()
                     when ((num - myApp.monster_num * 6) % 7) {
                         1 -> {
-                            player!!.hp = do_shuffle(list[num]).first
+                            val before_hp = player!!.hp
+                            player.hp = do_shuffle(list[num]).first
+                            player.current_hp = player.hp * player.current_hp/before_hp
                             tem_push_player!!.hp = do_shuffle(list[num]).second
                         }
                         2 -> {
-                            player!!.mp = do_shuffle(list[num]).first
+                            val before_mp = player!!.mp
+                            player.mp = do_shuffle(list[num]).first
+                            player.current_mp = player.mp * player.current_mp/before_mp
                             tem_push_player!!.mp = do_shuffle(list[num]).second
                         }
                         3 -> {
@@ -156,11 +203,11 @@ class Shuffle : Activity() {
                 } else if (num in myApp.monster_num * 6 + myApp.player_num * 7 + 1..myApp.monster_num * 6 + myApp.player_num * 7 + myApp.magic_num * 2) {
 
                     //マジック
-                    val id = (num - myApp.monster_num * 6 + myApp.player_num * 7) / myApp.magic_num
+                    val id = (num - myApp.monster_num * 6 - myApp.player_num * 7 - 1) / 2// 0~5/2
                     i = 0
                     load_magic.forEach() {
                         if (id == i) {
-                            when ((num - myApp.monster_num * 6 + myApp.player_num * 7) % 2) {
+                            when ((num - myApp.monster_num * 6 - myApp.player_num * 7) % 2) {
                                 1 -> it.mp = do_shuffle(list[num]).first
                                 0 -> it.power = do_shuffle(list[num]).first
                             }
@@ -168,16 +215,14 @@ class Shuffle : Activity() {
                         i++
                     }
                 } else if (num in myApp.monster_num * 6 + myApp.player_num * 7 + myApp.magic_num * 2 + 1..myApp.monster_num * 6 + myApp.player_num * 7 + myApp.magic_num * 2 + myApp.item_num * 1) {
-
                     //アイテム
-                    item!!.power = do_shuffle(list[num]).first
+                    item!!.power = do_shuffle(list[0]).first
                 }
             }
             realm.commitTransaction()
-            realm.close()
-            val intent = Intent(this, Shuffle::class.java)
-            finish()
-            startActivity(intent)
+            display()
+            Collections.shuffle(list)
+            realm.beginTransaction()
         }
 
 
@@ -186,10 +231,35 @@ class Shuffle : Activity() {
             realm.commitTransaction()
             realm.close()
             val intent = Intent(this, Status::class.java)
+            soundPool?.release()
+            shuffle_bgm.release()
             finish()
             startActivity(intent)
         }
 
+        display()
+
+    }
+
+
+    fun display(){
+
+        val magic = arrayOf(Magic(), Magic(), Magic())
+
+        val player = realm.where(PlayerModel::class.java).findFirst()
+        val item = realm.where(ItemModel::class.java).equalTo("set",1.toInt()).findFirst()
+        val load_magic = realm.where(MagicModel::class.java).equalTo("canuse", 2.toInt()).findAll()
+
+
+        var i = 0
+        load_magic.forEach(){
+            magic[i].id = it.id
+            magic[i].name = it.name
+            magic[i].mp = it.mp
+            magic[i].power = it.power
+            magic[i].explain = it.explain
+            i++
+        }
         //プレイヤーステータス表示
         findViewById<TextView>(R.id.player_name).setText(player!!.name)
         findViewById<TextView>(R.id.player_current_hp).setText(player.current_hp.toString())
@@ -202,6 +272,27 @@ class Shuffle : Activity() {
         findViewById<TextView>(R.id.player_speed).setText(player.speed.toString())
         findViewById<TextView>(R.id.player_dex).setText(player.dex.toString())
         findViewById<TextView>(R.id.player_money).setText(player.money.toString())
+
+        //プレイヤープッシュ処理
+        val push_player = realm.where(PushPlayerModel::class.java).findFirst()
+        findViewById<TextView>(R.id.player_maxhp).setOnClickListener {
+            Toast.makeText(applicationContext, push_player!!.hp, Toast.LENGTH_SHORT).show()
+        }
+        findViewById<TextView>(R.id.player_maxmp).setOnClickListener {
+            Toast.makeText(applicationContext, push_player!!.mp, Toast.LENGTH_SHORT).show()
+        }
+        findViewById<TextView>(R.id.player_attack).setOnClickListener {
+            Toast.makeText(applicationContext, push_player!!.attack, Toast.LENGTH_SHORT).show()
+        }
+        findViewById<TextView>(R.id.player_defense).setOnClickListener {
+            Toast.makeText(applicationContext, push_player!!.defense, Toast.LENGTH_SHORT).show()
+        }
+        findViewById<TextView>(R.id.player_mdef).setOnClickListener {
+            Toast.makeText(applicationContext, push_player!!.mdef, Toast.LENGTH_SHORT).show()
+        }
+        findViewById<TextView>(R.id.player_speed).setOnClickListener {
+            Toast.makeText(applicationContext, push_player!!.speed, Toast.LENGTH_SHORT).show()
+        }
 
         //魔法表示
         findViewById<TextView>(R.id.magic1_name).setText(magic[0].name.toString()+" ")
@@ -283,7 +374,7 @@ class Shuffle : Activity() {
         }else if(num in myApp.monster_num*6+myApp.player_num*7+1..myApp.monster_num*6+myApp.player_num*7+myApp.magic_num*2){
 
             //マジック
-            val id = (num - myApp.monster_num*6+myApp.player_num*7)/myApp.magic_num
+            val id = (num - myApp.monster_num*6-myApp.player_num*7)/myApp.magic_num
             when((num - myApp.monster_num*6+myApp.player_num*7)%2){
                 1 -> return origin_magic[id].mp to origin_magic[id].name+"のMP"
                 0 -> return origin_magic[id].power to origin_magic[id].name+"の効果"
