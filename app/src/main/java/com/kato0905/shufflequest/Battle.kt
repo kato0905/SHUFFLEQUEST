@@ -78,7 +78,7 @@ class Battle : Activity() {
 
     }
 
-//TODO: 広告追加
+
     lateinit var realm: Realm
     private val mHandler = Handler()
 
@@ -362,8 +362,6 @@ class Battle : Activity() {
     fun BackToField(player : PlayerModel){
         player.current_hp = player_current_hp
         player.current_mp = player_current_mp
-        realm.commitTransaction()
-        realm.close()
         latency = latency + 1000
         Handler().postDelayed(Runnable {
             if(monster_id == 17 && monster_current_hp <= 0){   //ゲームクリア
@@ -385,12 +383,13 @@ class Battle : Activity() {
                 battle_bgm.release()
                 finish()
             }
+            realm.commitTransaction()
+            realm.close()
         }, latency.toLong())
     }
 
     fun BackToResult(){
-        realm.commitTransaction()
-        realm.close()
+
         latency = latency + 1000
         Handler().postDelayed(Runnable {
             if(monster_id == 17){
@@ -408,6 +407,8 @@ class Battle : Activity() {
                 finish()
                 startActivity(intent)
             }
+            realm.commitTransaction()
+            realm.close()
         }, latency.toLong())
     }
 
@@ -542,8 +543,7 @@ class Battle : Activity() {
                     latency = latency + 1000
                     if(endflag == 0){
                         endflag = 1
-                        realm.commitTransaction()
-                        realm.close()
+
                         Handler().postDelayed(Runnable {
                             val intent = Intent(this, Map_town::class.java)
                             soundPool?.release()
@@ -551,6 +551,8 @@ class Battle : Activity() {
                             finish()
                             startActivity(intent)
                             soundPool.play(se_worp, 1.0f, 1.0f, 1, 0, 1.0f)
+                            realm.commitTransaction()
+                            realm.close()
                         }, latency.toLong())
                     }
                 }
