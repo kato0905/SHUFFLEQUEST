@@ -104,6 +104,7 @@ class Intro : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
 
+
         val audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -117,7 +118,15 @@ class Intro : Activity() {
         content = intent.getStringExtra("content")
         when(content) {
             "intro" -> findViewById<TextView>(R.id.intro_text).setText(intro_story[i])
-            "result" -> findViewById<TextView>(R.id.intro_text).setText(result_story[i])
+            "result" -> {
+                findViewById<TextView>(R.id.intro_text).setText(result_story[i])
+                // Realmのセットアップ
+                val realmConfig = RealmConfiguration.Builder()
+                        .deleteRealmIfMigrationNeeded()
+                        .build()
+                realm = Realm.getInstance(realmConfig)
+                realm.beginTransaction()
+            }
             "clear" -> findViewById<TextView>(R.id.intro_text).setText(clear_story[i])
             "grudge_death" -> findViewById<TextView>(R.id.intro_text).setText(grudge_death_story[i])
             "true_clear" -> {
@@ -151,12 +160,7 @@ class Intro : Activity() {
                             cord.text = result_story[i]
                         }else{
 
-                            // Realmのセットアップ
-                            val realmConfig = RealmConfiguration.Builder()
-                                    .deleteRealmIfMigrationNeeded()
-                                    .build()
-                            realm = Realm.getInstance(realmConfig)
-                            realm.beginTransaction()
+
                             val load_magic = realm.where(MagicModel::class.java).equalTo("canuse",0.toInt()).findAll()
                             val player = realm.where(PlayerModel::class.java).findFirst()
                             run loop@{
