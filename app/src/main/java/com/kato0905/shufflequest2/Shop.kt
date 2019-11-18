@@ -1,8 +1,7 @@
-package com.kato0905.shufflequest
+package com.kato0905.shufflequest2
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.SoundPool
@@ -12,7 +11,6 @@ import android.view.View
 import android.widget.*
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import kotlinx.android.synthetic.main.activity_shop.*
 
 class Shop : Activity() {
 
@@ -102,7 +100,7 @@ class Shop : Activity() {
 
 
         item.forEach(){
-            var ItemID = getResources().getIdentifier("item_"+ i + "_name", "id", "com.kato0905.shufflequest")
+            var ItemID = getResources().getIdentifier("item_"+ i + "_name", "id", "com.kato0905.shufflequest2")
             findViewById<TextView>(ItemID).setText(""+it.name)
 
             //購入処理
@@ -148,13 +146,13 @@ class Shop : Activity() {
                 }
             }
 
-            var resID = getResources().getIdentifier("item_"+ i + "_cost", "id", "com.kato0905.shufflequest")
+            var resID = getResources().getIdentifier("item_"+ i + "_cost", "id", "com.kato0905.shufflequest2")
             findViewById<TextView>(resID).setText(" "+it.cost)
 
-            resID = getResources().getIdentifier("item_"+ i + "_power", "id", "com.kato0905.shufflequest")
+            resID = getResources().getIdentifier("item_"+ i + "_power", "id", "com.kato0905.shufflequest2")
             findViewById<TextView>(resID).setText(" "+it.power)
 
-            resID = getResources().getIdentifier("item_"+ i + "_explain", "id", "com.kato0905.shufflequest")
+            resID = getResources().getIdentifier("item_"+ i + "_explain", "id", "com.kato0905.shufflequest2")
             findViewById<TextView>(resID).setText(" "+it.explain)
             i++
         }

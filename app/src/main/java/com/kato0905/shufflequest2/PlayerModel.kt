@@ -1,8 +1,8 @@
-package com.kato0905.shufflequest
+package com.kato0905.shufflequest2
 
 import io.realm.RealmObject
 
-open class OriginPlayerModel(
+open class PlayerModel(
         open var id : Int = 0,
         open var name : String = "",
         open var hp : Int = 0,

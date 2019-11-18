@@ -1,4 +1,4 @@
-package com.kato0905.shufflequest
+package com.kato0905.shufflequest2
 
 import io.realm.RealmObject
 

@@ -1,4 +1,4 @@
-package com.kato0905.shufflequest
+package com.kato0905.shufflequest2
 
 //import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,10 +12,6 @@ import android.util.Log
 import android.widget.*
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmObject
-import io.realm.RealmResults
-import java.security.AccessController.getContext
-import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 import android.media.AudioAttributes
@@ -38,6 +34,8 @@ class Battle : Activity() {
     var monster_current_mp = 1
     var player_current_hp = 1
     var player_current_mp = 1
+    var player_current_hp_stack = 1
+    var player_current_mp_stack = 1
     var monster_condition = 0   //1: poison, 2: sleep
     var monster_condition_power = 0 //毒の威力or眠りの解除確率(25,50,75,100)
     var player_condition = 0
@@ -80,7 +78,6 @@ class Battle : Activity() {
 
 
     lateinit var realm: Realm
-    private val mHandler = Handler()
 
     override fun onResume(){
         super.onResume()
@@ -133,7 +130,8 @@ class Battle : Activity() {
                 .build()
         realm = Realm.getInstance(realmConfig)
 
-        realm.beginTransaction()
+        Log.d("system_output","begin1")
+        //realm.beginTransaction()
 
 
         //現在のフィールドの進捗状況
@@ -280,6 +278,7 @@ class Battle : Activity() {
                     findViewById<TextView>(R.id.player_current_hp).setText(display.toString())
                     findViewById<TextView>(R.id.announce).setText(item.name+"の効果により、HPを"+display+"で復活")
                 }, latency.toLong())
+                realm.beginTransaction()
                 item.current--
                 realm.commitTransaction()
                 realm.beginTransaction()
@@ -343,7 +342,9 @@ class Battle : Activity() {
             //モンスターが死んだ
             if (endflag == 0) {
                 endflag = 1
+                realm.beginTransaction()
                 player.money += monster!!.drop
+                realm.commitTransaction()
                 latency = latency + 1000
                 Handler().postDelayed(Runnable {
                     soundPool.play(se_monster_defeat, 1.0f, 1.0f, 1, 0, 1.0f)
@@ -360,8 +361,8 @@ class Battle : Activity() {
     }
 
     fun BackToField(player : PlayerModel){
-        player.current_hp = player_current_hp
-        player.current_mp = player_current_mp
+        player_current_hp_stack = player_current_hp
+        player_current_mp_stack = player_current_mp
         latency = latency + 1000
         Handler().postDelayed(Runnable {
             if(monster_id == 17 && monster_current_hp <= 0){   //ゲームクリア
@@ -383,6 +384,9 @@ class Battle : Activity() {
                 battle_bgm.release()
                 finish()
             }
+            realm.beginTransaction()
+            player.current_hp = player_current_hp_stack
+            player.current_mp = player_current_mp_stack
             realm.commitTransaction()
             realm.close()
         }, latency.toLong())
@@ -407,6 +411,7 @@ class Battle : Activity() {
                 finish()
                 startActivity(intent)
             }
+            realm.beginTransaction()
             realm.commitTransaction()
             realm.close()
         }, latency.toLong())
@@ -427,9 +432,9 @@ class Battle : Activity() {
                         findViewById<TextView>(R.id.announce).setText(player.name + "のHPが" + item.power + "回復した")
                         soundPool.play(se_heal, 1.0f, 1.0f, 1, 0, 1.0f)
                     }, latency.toLong())
+                    realm.beginTransaction()
                     item.current--
                     realm.commitTransaction()
-                    realm.beginTransaction()
                 }
                 //2 聖水
                 2 -> {
@@ -441,9 +446,9 @@ class Battle : Activity() {
                         findViewById<TextView>(R.id.announce).setText(player.name + "のMPが" + item.power + "回復した")
                         soundPool.play(se_heal, 1.0f, 1.0f, 1, 0, 1.0f)
                     }, latency.toLong())
+                    realm.beginTransaction()
                     item.current--
                     realm.commitTransaction()
-                    realm.beginTransaction()
                 }
                 //3 上薬草
                 3 -> {
@@ -456,9 +461,9 @@ class Battle : Activity() {
                         findViewById<TextView>(R.id.announce).setText(player.name + "のHPが" + recovery_amount + "回復した")
                         soundPool.play(se_heal, 1.0f, 1.0f, 1, 0, 1.0f)
                     }, latency.toLong())
+                    realm.beginTransaction()
                     item.current--
                     realm.commitTransaction()
-                    realm.beginTransaction()
                 }
                 //4 上聖水
                 4 -> {
@@ -471,9 +476,9 @@ class Battle : Activity() {
                         findViewById<TextView>(R.id.announce).setText(player.name + "のMPが" + recovery_amount + "回復した")
                         soundPool.play(se_heal, 1.0f, 1.0f, 1, 0, 1.0f)
                     }, latency.toLong())
+                    realm.beginTransaction()
                     item.current--
                     realm.commitTransaction()
-                    realm.beginTransaction()
                 }
                 in 5..9 -> {
                     announce(1000, item.name+"は使うものではない!")
@@ -551,6 +556,7 @@ class Battle : Activity() {
                             finish()
                             startActivity(intent)
                             soundPool.play(se_worp, 1.0f, 1.0f, 1, 0, 1.0f)
+                            realm.beginTransaction()
                             realm.commitTransaction()
                             realm.close()
                         }, latency.toLong())
@@ -709,13 +715,17 @@ class Battle : Activity() {
             if(player!!.speed + player_buf[2] >= monster!!.speed) {
                 player_attack(monster, player, item, 0)  //プレイヤーの攻撃
                 turn_func_playerTomonster(monster, player, *magic)  //プレイヤーターンからモンスターターンへ
-                enemy_turn(monster, player) //モンスターターン
-                turn_func_monsterTocommand(monster, player, item)    //モンスターターンからコマンド選択へ
+                if(endflag != 1) {
+                    enemy_turn(monster, player) //モンスターターン
+                    turn_func_monsterTocommand(monster, player, item)    //モンスターターンからコマンド選択へ
+                }
             }else{
                 enemy_turn(monster, player)
                 turn_func_monsterToplayer(monster, player, item, *magic)
-                player_attack(monster, player, item,500)
-                turn_func_playerTocommand(monster, player)
+                if(endflag != 1) {
+                    player_attack(monster, player, item, 500)
+                    turn_func_playerTocommand(monster, player)
+                }
             }
         }
         findViewById<Button>(R.id.magic_button1).setOnClickListener{
@@ -726,14 +736,18 @@ class Battle : Activity() {
                 announce(500, player!!.name+"の"+magic[0].name)
                 do_magic(monster, player, magic[0])
                 turn_func_playerTomonster(monster, player!!, *magic)
-                enemy_turn(monster, player)
-                turn_func_monsterTocommand(monster, player, item)
+                if(endflag != 1) {
+                    enemy_turn(monster, player)
+                    turn_func_monsterTocommand(monster, player, item)
+                }
             }else{
                 enemy_turn(monster, player)
                 turn_func_monsterToplayer(monster, player, item, *magic)
-                announce(1000, player!!.name+"の"+magic[0].name)
-                do_magic(monster, player, magic[0])
-                turn_func_playerTocommand(monster, player)
+                if(endflag != 1) {
+                    announce(1000, player!!.name+"の"+magic[0].name)
+                    do_magic(monster, player, magic[0])
+                    turn_func_playerTocommand(monster, player)
+                }
             }
 
         }
@@ -745,14 +759,18 @@ class Battle : Activity() {
                 announce(500, player!!.name+"の"+magic[1].name)
                 do_magic(monster, player, magic[1])
                 turn_func_playerTomonster(monster, player!!, *magic)
-                enemy_turn(monster, player)
-                turn_func_monsterTocommand(monster, player, item)
+                if(endflag != 1) {
+                    enemy_turn(monster, player)
+                    turn_func_monsterTocommand(monster, player, item)
+                }
             }else{
                 enemy_turn(monster, player)
                 turn_func_monsterToplayer(monster, player, item, *magic)
-                announce(1000, player!!.name+"の"+magic[1].name)
-                do_magic(monster, player, magic[1])
-                turn_func_playerTocommand(monster, player)
+                if(endflag != 1) {
+                    announce(1000, player!!.name + "の" + magic[1].name)
+                    do_magic(monster, player, magic[1])
+                    turn_func_playerTocommand(monster, player)
+                }
             }
         }
         findViewById<Button>(R.id.magic_button3).setOnClickListener{
@@ -763,14 +781,18 @@ class Battle : Activity() {
                 announce(500, player!!.name+"の"+magic[2].name)
                 do_magic(monster, player, magic[2])
                 turn_func_playerTomonster(monster, player!!, *magic)
-                enemy_turn(monster, player)
-                turn_func_monsterTocommand(monster, player, item)
+                if(endflag != 1) {
+                    enemy_turn(monster, player)
+                    turn_func_monsterTocommand(monster, player, item)
+                }
             }else{
                 enemy_turn(monster, player)
                 turn_func_monsterToplayer(monster, player, item, *magic)
-                announce(1000, player!!.name+"の"+magic[2].name)
-                do_magic(monster, player, magic[2])
-                turn_func_playerTocommand(monster, player)
+                if(endflag != 1) {
+                    announce(1000, player!!.name + "の" + magic[2].name)
+                    do_magic(monster, player, magic[2])
+                    turn_func_playerTocommand(monster, player)
+                }
             }
         }
         findViewById<Button>(R.id.item_button).setOnClickListener{
@@ -780,8 +802,10 @@ class Battle : Activity() {
             announce(500, player!!.name+"は"+item!!.name+"を使用した")
             use_item(monster, player, item)
             turn_func_playerTomonster(monster, player, *magic)
-            enemy_turn(monster, player)
-            turn_func_monsterTocommand(monster, player, item)
+            if(endflag != 1) {
+                enemy_turn(monster, player)
+                turn_func_monsterTocommand(monster, player, item)
+            }
         }
         findViewById<Button>(R.id.escape_button).setOnClickListener{
             clickable_false()
@@ -795,20 +819,20 @@ class Battle : Activity() {
                     soundPool.play(se_escape, 1.0f, 1.0f, 1, 0, 1.0f)
                     findViewById<TextView>(R.id.announce).setText("うまく逃げ切れた")
                 }, latency.toLong())
-                player.current_hp = player_current_hp
-                player.current_mp = player_current_mp
                 BackToField(player)
             }else{
                 announce(1000, "しかし回り込まれた")
                 turn_func_playerTomonster(monster, player!!, *magic)
-                enemy_turn(monster, player)
-                turn_func_monsterTocommand(monster, player, item)
+                if(endflag != 1) {
+                    enemy_turn(monster, player)
+                    turn_func_monsterTocommand(monster, player, item)
+                }
             }
         }
     }
 
     fun button_click_effect(id_name : String){
-        val button_id = getResources().getIdentifier(id_name, "id", "com.kato0905.shufflequest")
+        val button_id = getResources().getIdentifier(id_name, "id", "com.kato0905.shufflequest2")
         findViewById<Button>(button_id).alpha = 0.6.toFloat()   //ボタンを透明に
         Handler().postDelayed(Runnable {
             findViewById<Button>(button_id).alpha = 1.toFloat()   //ボタンを非透明に
@@ -1174,7 +1198,7 @@ class Battle : Activity() {
         findViewById<Button>(R.id.item_button).setText(item!!.name)
 
         //モンスター画像表示
-        val monsterview = getResources().getIdentifier(monster.imagename, "drawable", "com.kato0905.shufflequest")
+        val monsterview = getResources().getIdentifier(monster.imagename, "drawable", "com.kato0905.shufflequest2")
         findViewById<ImageView>(R.id.monster_view).setImageResource(monsterview)
     }
 

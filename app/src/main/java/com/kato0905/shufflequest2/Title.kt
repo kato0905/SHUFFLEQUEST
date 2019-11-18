@@ -1,4 +1,4 @@
-package com.kato0905.shufflequest
+package com.kato0905.shufflequest2
 
 //import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,16 +7,12 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.SoundPool
-import android.util.Log
-import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_title.*
-import java.io.*
 
 class Title : Activity() {
 

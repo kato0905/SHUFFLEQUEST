@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.kato0905.shufflequest">
+    package="com.kato0905.shufflequest2">
 
     <application
         android:allowBackup="true"
-        android:name=".MyApp"
+        android:name="com.kato0905.shufflequest2.MyApp"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -15,23 +15,23 @@
         <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4993083375135587~9537404472"/>
+            android:value="ca-app-pub-4993083375135587~5851296559"/>
 
-        <activity android:name=".Title">
+        <activity android:name="com.kato0905.shufflequest2.Title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Battle" />
-        <activity android:name=".Field_Forest" />
-        <activity android:name=".Intro" />
-        <activity android:name=".Map_town" />
-        <activity android:name=".Game_clear" />
-        <activity android:name=".Status" />
-        <activity android:name=".Shop" />
-        <activity android:name=".Shuffle"></activity>
+        <activity android:name="com.kato0905.shufflequest2.Battle" />
+        <activity android:name="com.kato0905.shufflequest2.Field_Forest" />
+        <activity android:name="com.kato0905.shufflequest2.Intro" />
+        <activity android:name="com.kato0905.shufflequest2.Map_town" />
+        <activity android:name="com.kato0905.shufflequest2.Game_clear" />
+        <activity android:name="com.kato0905.shufflequest2.Status" />
+        <activity android:name="com.kato0905.shufflequest2.Shop" />
+        <activity android:name="com.kato0905.shufflequest2.Shuffle"></activity>
     </application>
 
 </manifest>

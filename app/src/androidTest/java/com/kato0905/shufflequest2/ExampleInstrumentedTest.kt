@@ -1,4 +1,4 @@
-package com.kato0905.shufflequest
+package com.kato0905.shufflequest2
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.kato0905.shufflequest", appContext.packageName)
+        assertEquals("com.kato0905.shufflequest2", appContext.packageName)
     }
 }

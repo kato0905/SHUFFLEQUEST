@@ -1,4 +1,4 @@
-package com.kato0905.shufflequest
+package com.kato0905.shufflequest2
 
 import android.app.Activity
 import android.content.Intent
@@ -7,9 +7,7 @@ import android.media.MediaPlayer
 import android.media.SoundPool
 //import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
-import android.widget.TextView
 
 class Game_clear : Activity() {
     private lateinit var soundPool: SoundPool

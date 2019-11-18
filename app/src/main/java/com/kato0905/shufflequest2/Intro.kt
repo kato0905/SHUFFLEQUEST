@@ -1,4 +1,4 @@
-package com.kato0905.shufflequest
+package com.kato0905.shufflequest2
 
 import android.content.Intent
 //import android.support.v7.app.AppCompatActivity
@@ -14,11 +14,12 @@ import android.widget.TextView
 import android.widget.Toast
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import org.w3c.dom.Text
 
 class Intro : Activity() {
     private lateinit var soundPool: SoundPool
     private lateinit var intro_bgm: MediaPlayer
+
+    var isFinish = 0
 
     var intro_story = arrayOf(
             "やっと目が覚めたか",
@@ -70,6 +71,8 @@ class Intro : Activity() {
 
     var i = 0
 
+    var isgetMagic = 0
+
     var content = "content"
 
     lateinit var realm: Realm
@@ -91,6 +94,8 @@ class Intro : Activity() {
         intro_bgm.setVolume(0.5f, 0.5f)
         intro_bgm.setLooping(true)
         intro_bgm.start()
+
+        isFinish = 0
 
     }
 
@@ -126,6 +131,24 @@ class Intro : Activity() {
                         .build()
                 realm = Realm.getInstance(realmConfig)
                 realm.beginTransaction()
+
+                val load_magic = realm.where(MagicModel::class.java).equalTo("canuse",0.toInt()).findAll()
+                val player = realm.where(PlayerModel::class.java).findFirst()
+                run loop@{
+                    load_magic.forEach() {
+                        if ((0..100).random() <= 30) {
+                            it.canuse = 1
+                            isgetMagic = 1
+                            return@loop
+                        }
+                    }
+                }
+
+                player!!.current_hp = player.hp
+                player.current_mp = player.mp
+                realm.commitTransaction()
+                realm.close()
+
             }
             "clear" -> findViewById<TextView>(R.id.intro_text).setText(clear_story[i])
             "grudge_death" -> findViewById<TextView>(R.id.intro_text).setText(grudge_death_story[i])
@@ -140,89 +163,84 @@ class Intro : Activity() {
     override fun onTouchEvent(event: MotionEvent) :Boolean {
         val cord : TextView = findViewById(R.id.intro_text)
 
-        when(event.getAction()) {
-            MotionEvent.ACTION_UP -> {
-                i++
-                when(content) {
-                    "intro" -> {
-                        if(i < intro_story.size){
-                            cord.text = intro_story[i]
-                        }else{
-                            val intent = Intent(this, Map_town::class.java)
-                            soundPool?.release()
-                            intro_bgm.release()
-                            finish()
-                            startActivity(intent)
+        if(isFinish != 1) {
+
+            when (event.getAction()) {
+                MotionEvent.ACTION_UP -> {
+                    i++
+                    when (content) {
+                        "intro" -> {
+                            if (i < intro_story.size) {
+                                cord.text = intro_story[i]
+                            } else {
+                                val intent = Intent(this, Map_town::class.java)
+                                soundPool?.release()
+                                intro_bgm.release()
+                                finish()
+                                startActivity(intent)
+                                isFinish = 1
+                            }
                         }
-                    }
-                    "result" -> {
-                        if(i < result_story.size){
-                            cord.text = result_story[i]
-                        }else{
+                        "result" -> {
+                            if (i < result_story.size) {
+                                cord.text = result_story[i]
+                            } else {
 
 
-                            val load_magic = realm.where(MagicModel::class.java).equalTo("canuse",0.toInt()).findAll()
-                            val player = realm.where(PlayerModel::class.java).findFirst()
-                            run loop@{
-                                load_magic.forEach() {
-                                    if ((0..100).random() <= 30) {
-                                        it.canuse = 1
-                                        Toast.makeText(applicationContext, "魔法が一つアンロックされました", Toast.LENGTH_LONG).show()
-                                        return@loop
-                                    }
+                                if (isgetMagic == 1) {
+                                    Toast.makeText(applicationContext, "魔法が一つアンロックされました", Toast.LENGTH_LONG).show()
                                 }
+                                val intent = Intent(this, Map_town::class.java)
+                                soundPool?.release()
+                                intro_bgm.release()
+                                finish()
+                                startActivity(intent)
+                                isFinish = 1
                             }
-                            player!!.current_hp = player.hp
-                            player.current_mp = player.mp
-                            realm.commitTransaction()
-                            realm.close()
-
-                            val intent = Intent(this, Map_town::class.java)
-                            soundPool?.release()
-                            intro_bgm.release()
-                            finish()
-                            startActivity(intent)
                         }
-                    }
-                    "clear" -> {
-                        if(i < clear_story.size){
-                            cord.text = clear_story[i]
-                            if(i == clear_story.size - 1){
-                                findViewById<ImageView>(R.id.intro_image).setImageResource(R.drawable.grudge)
+                        "clear" -> {
+                            if (i < clear_story.size) {
+                                cord.text = clear_story[i]
+                                if (i == clear_story.size - 1) {
+                                    findViewById<ImageView>(R.id.intro_image).setImageResource(R.drawable.grudge)
+                                }
+                            } else {
+                                val intent = Intent(this, Battle::class.java)
+                                intent.putExtra("current_progress", "101")
+                                soundPool?.release()
+                                intro_bgm.release()
+                                finish()
+                                startActivity(intent)
+                                isFinish = 1
                             }
-                        }else{
-                            val intent = Intent(this, Battle::class.java)
-                            intent.putExtra("current_progress","101")
-                            soundPool?.release()
-                            intro_bgm.release()
-                            finish()
-                            startActivity(intent)
                         }
-                    }
-                    "grudge_death" -> {
-                        if(i < grudge_death_story.size){
-                            cord.text = grudge_death_story[i]
-                        }else{
-                            val intent = Intent(this, Title::class.java)
-                            soundPool?.release()
-                            intro_bgm.release()
-                            finish()
-                            startActivity(intent)
+                        "grudge_death" -> {
+                            if (i < grudge_death_story.size) {
+                                cord.text = grudge_death_story[i]
+                            } else {
+                                val intent = Intent(this, Title::class.java)
+                                soundPool?.release()
+                                intro_bgm.release()
+                                finish()
+                                startActivity(intent)
+                                isFinish = 1
+                            }
                         }
-                    }
-                    "true_clear" -> {
-                        if(i < true_clear_story.size){
-                            cord.text = true_clear_story[i]
-                            findViewById<ImageView>(R.id.intro_image).setImageAlpha(255-255*i/true_clear_story.size)
-                        }else{
-                            val intent = Intent(this, Game_clear::class.java)
-                            soundPool?.release()
-                            intro_bgm.release()
-                            finish()
-                            startActivity(intent)
+                        "true_clear" -> {
+                            if (i < true_clear_story.size) {
+                                cord.text = true_clear_story[i]
+                                findViewById<ImageView>(R.id.intro_image).setImageAlpha(255 - 255 * i / true_clear_story.size)
+                            } else {
+                                val intent = Intent(this, Game_clear::class.java)
+                                soundPool?.release()
+                                intro_bgm.release()
+                                finish()
+                                startActivity(intent)
+                                isFinish = 1
+                            }
                         }
+                        else -> Log.d("system_output", "Error in intro_onTouchEvent")
                     }
-                    else -> Log.d("system_output","Error in intro_onTouchEvent")
                 }
             }
         }
